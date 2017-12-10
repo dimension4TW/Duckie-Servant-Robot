@@ -9,7 +9,7 @@ from scipy.stats import multivariate_normal, entropy
 from scipy.ndimage.filters import gaussian_filter
 from math import floor, atan2, pi, cos, sin, sqrt
 import time
-import requests
+
 
 
 class LaneFilterNode(object):
@@ -55,7 +55,7 @@ For more info on algorithm and parameters please refer to the google doc:
 
         # Subscribers
         if self.use_propagation:
-            self.sub_velocity = rospy.Subscriber("~velocity", Twist2DStamped, self.updateVelocity)
+            self.sub_velocity = rospy.Subscriber("/lane_filter_node/velocity", Twist2DStamped, self.updateVelocity)
         self.sub = rospy.Subscriber("~segment_list", SegmentList, self.processSegments, queue_size=1)
 
         # Publishers
@@ -239,12 +239,6 @@ For more info on algorithm and parameters please refer to the google doc:
         self.beliefRV=self.beliefRV/np.sum(self.beliefRV)#np.linalg.norm(self.beliefRV)
 
     def generateVote(self,segment):
-	    print 'fuck1'
-		print 'fuck2'
-	    r = requests.request('GET', '172.20.10.4:5000/get_location')
-		print r.status_code 
-		print r.text
-		print 'fuck3'
         p1 = np.array([segment.points[0].x, segment.points[0].y])
         p2 = np.array([segment.points[1].x, segment.points[1].y])
         t_hat = (p2-p1)/np.linalg.norm(p2-p1)
@@ -260,7 +254,8 @@ For more info on algorithm and parameters please refer to the google doc:
         l_i = (l1+l2)/2
         d_i = (d1+d2)/2
         phi_i = np.arcsin(t_hat[1])
-		'''
+
+        '''
         if segment.color == segment.WHITE: # right lane is white
             if(p1[0] > p2[0]): # right edge of white lane
                 d_i = d_i - self.linewidth_white
@@ -273,18 +268,14 @@ For more info on algorithm and parameters please refer to the google doc:
             if (p2[0] > p1[0]): # left edge of yellow lane
                 d_i = d_i - self.linewidth_yellow
                 phi_i = -phi_i
-            else: # right edge of white lane
+            else: # right edge of yellow lane
                 d_i = -d_i
             d_i =  self.lanewidth/2 - d_i
         '''
-		if segment.color == segment.YELLOW:
-		    if(p1[0] > p2[0]): # right edge
-			    d_i = d_i - self.linewidth_yellow * 2
-			else: # left edge
-				d_i = - d_i
-				phi_i = -phi_i
+        #How to generate d, phi, l with a line in the middle, left half yellow and right half white.
+        #Start coding from here
 
-        #return 0, 0, l_i
+
         return d_i, phi_i, l_i
 
     def getSegmentDistance(self, segment):
