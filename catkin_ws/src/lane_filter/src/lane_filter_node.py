@@ -277,13 +277,28 @@ For more info on algorithm and parameters please refer to the google doc:
                 d_i = -d_i
             d_i =  self.lanewidth/2 - d_i
         '''
+		new_linewidth_yellow = 0.035
 		if segment.color == segment.YELLOW:
-		    if(p1[0] > p2[0]): # right edge
-			    d_i = d_i - self.linewidth_yellow * 2
-			else: # left edge
-				d_i = - d_i
+		    if d_i > 0 && p1[0] > p2[0]: # car on left and detect right edge
+			    d_i = d_i - new_linewidth_yellow / 2
+				d_i = -d_i
+			elif d_i < 0 && p1[0] <= p2[0]: # car on left and detect left edge
+			    d_i = -d_i + new_linewidth_yellow / 2
+				d_i = -d_i
 				phi_i = -phi_i
+			elif d_i < 0 && p1[0] > p2[0]: # car on right and detect right edge
+			    d_i = -d_i + new_linewidth_yellow / 2
+			elif d_i > 0 && p1[0] <= p2[0]: # car on right and detect left edge
+			    d_i = d_i - new_linewidth_yellow / 2
+                phi_i = -phi_i
 
+            '''
+		    if(p1[0] > p2[0]): # right edge
+			    d_i = d_i - new_linewidth_yellow / 2
+			else: # left edge
+				d_i = - d_i + new_linewidth_yellow / 2
+				phi_i = -phi_i
+            '''
         #return 0, 0, l_i
         return d_i, phi_i, l_i
 
