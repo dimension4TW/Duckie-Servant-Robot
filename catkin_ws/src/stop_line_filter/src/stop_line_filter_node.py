@@ -26,6 +26,8 @@ class StopLineFilterNode(object):
         self.sub_segs      = rospy.Subscriber("~segment_list", SegmentList, self.processSegments)
         self.sub_lane      = rospy.Subscriber("~lane_pose",LanePose, self.processLanePose)
         self.sub_mode      = rospy.Subscriber("fsm_node/mode",FSMState, self.processStateChange)
+
+
         self.pub_stop_line_reading = rospy.Publisher("~stop_line_reading", StopLineReading, queue_size=1)
         self.pub_at_stop_line = rospy.Publisher("~at_stop_line", BoolStamped, queue_size=1)
 

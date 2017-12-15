@@ -239,12 +239,7 @@ For more info on algorithm and parameters please refer to the google doc:
         self.beliefRV=self.beliefRV/np.sum(self.beliefRV)#np.linalg.norm(self.beliefRV)
 
     def generateVote(self,segment):
-	    print 'fuck1'
-		print 'fuck2'
-	    r = requests.request('GET', '172.20.10.4:5000/get_location')
-		print r.status_code 
-		print r.text
-		print 'fuck3'
+        #r = requests.request('GET', '172.20.10.4:5000/get_location')
         p1 = np.array([segment.points[0].x, segment.points[0].y])
         p2 = np.array([segment.points[1].x, segment.points[1].y])
         t_hat = (p2-p1)/np.linalg.norm(p2-p1)
@@ -260,7 +255,7 @@ For more info on algorithm and parameters please refer to the google doc:
         l_i = (l1+l2)/2
         d_i = (d1+d2)/2
         phi_i = np.arcsin(t_hat[1])
-		'''
+        '''
         if segment.color == segment.WHITE: # right lane is white
             if(p1[0] > p2[0]): # right edge of white lane
                 d_i = d_i - self.linewidth_white
@@ -277,19 +272,19 @@ For more info on algorithm and parameters please refer to the google doc:
                 d_i = -d_i
             d_i =  self.lanewidth/2 - d_i
         '''
-		new_linewidth_yellow = 0.035
-		if segment.color == segment.YELLOW:
-		    if d_i > 0 && p1[0] > p2[0]: # car on left and detect right edge
-			    d_i = d_i - new_linewidth_yellow / 2
-				d_i = -d_i
-			elif d_i < 0 && p1[0] <= p2[0]: # car on left and detect left edge
-			    d_i = -d_i + new_linewidth_yellow / 2
-				d_i = -d_i
-				phi_i = -phi_i
-			elif d_i < 0 && p1[0] > p2[0]: # car on right and detect right edge
-			    d_i = -d_i + new_linewidth_yellow / 2
-			elif d_i > 0 && p1[0] <= p2[0]: # car on right and detect left edge
-			    d_i = d_i - new_linewidth_yellow / 2
+        new_linewidth_yellow = 0.035
+        if segment.color == segment.YELLOW:
+            if d_i > 0 and p1[0] > p2[0]: # car on left and detect right edge
+                d_i = d_i - new_linewidth_yellow / 2
+                d_i = -d_i
+            elif d_i < 0 and p1[0] <= p2[0]: # car on left and detect left edge
+                d_i = -d_i + new_linewidth_yellow / 2
+                d_i = -d_i
+                phi_i = -phi_i
+            elif d_i < 0 and p1[0] > p2[0]: # car on right and detect right edge
+                d_i = -d_i + new_linewidth_yellow / 2
+            elif d_i > 0 and p1[0] <= p2[0]: # car on right and detect left edge
+                d_i = d_i - new_linewidth_yellow / 2
                 phi_i = -phi_i
 
             '''

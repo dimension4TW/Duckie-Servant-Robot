@@ -6,6 +6,7 @@ from duckietown_msgs.msg import AprilTagDetectionArray
 import numpy as np
 import tf.transformations as tr
 from geometry_msgs.msg import PoseStamped, Point
+from std_msgs.msg import Float32, Int32
 
 class AprilPostPros(object):
 
@@ -17,6 +18,7 @@ class AprilPostPros(object):
 
         # -------- publisher --------
         self.pub_info = rospy.Publisher("~position_info", Point, queue_size=1)
+        self.pub_id = rospy.Publisher("~id_info", Int32, queue_size=1) #publish apriltags id
 
         print ("Start to detect apriltags:")
 
@@ -35,6 +37,9 @@ class AprilPostPros(object):
             #pos = Point()
             pos = detection.pose.pose.position
             self.pub_info.publish(pos)
+            #publish ID
+            aid = tag_id
+            self.pub_id.publish(aid)
         
 if __name__ == '__main__': 
     rospy.init_node('AprilPostPros',anonymous=False)
