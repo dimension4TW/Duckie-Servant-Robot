@@ -1,0 +1,13 @@
+<launch>
+
+	<arg name="pkg_name" value="choose_direction_duckie"/>
+	<arg name="node_name" default="choose_direction_node"/>
+	<arg name="veh" doc="duckie"/>
+	<arg name="local" default="false"/>
+
+	<group ns="$(arg veh)">
+		<node unless="$(arg local)" machine="$(arg veh)" name="$(arg node_name)" pkg="$(arg pkg_name)"
+		type="$(arg node_name).py" output="screen">
+		</node>
+	</group>
+</launch>

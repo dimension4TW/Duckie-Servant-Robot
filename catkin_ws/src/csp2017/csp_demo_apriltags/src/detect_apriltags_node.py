@@ -2,7 +2,7 @@
 import rospkg
 import rospy
 import yaml
-from duckietown_msgs.msg import AprilTagDetectionArray
+from duckietown_msgs.msg import AprilTagDetectionArray, BoolStamped
 import numpy as np
 import tf.transformations as tr
 from geometry_msgs.msg import PoseStamped, Point
@@ -19,11 +19,16 @@ class AprilPostPros(object):
         # -------- publisher --------
         self.pub_info = rospy.Publisher("~position_info", Point, queue_size=1)
         self.pub_id = rospy.Publisher("~id_info", Int32, queue_size=1) #publish apriltags id
+        self.pub_turn = rospy.Publisher("~turn_info",BoolStamped, queue_size=1)
 
         print ("Start to detect apriltags:")
 
     def callback(self, msg):
         # Load tag detections message
+        turn = BoolStamped()
+        turn.data = False
+        if(len(msg.detections) == 0):
+            turn.data = False
         for detection in msg.detections:
             #Try to print the ID and position of the apriltags
             tag_id = detection.id
@@ -40,6 +45,9 @@ class AprilPostPros(object):
             #publish ID
             aid = tag_id
             self.pub_id.publish(aid)
+            turn.data = True
+            self.pub_turn.publish(turn)
+
         
 if __name__ == '__main__': 
     rospy.init_node('AprilPostPros',anonymous=False)
