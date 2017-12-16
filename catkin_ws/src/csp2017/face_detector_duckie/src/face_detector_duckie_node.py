@@ -9,6 +9,7 @@ import cv2
 import sys
 import time
 import threading
+import requests
 class face_detector_wama(object):
 	def __init__(self):
 		self.node_name = rospy.get_name()
@@ -102,8 +103,9 @@ class face_detector_wama(object):
 
 		# Detect faces in the image
 		faces = faceCascade.detectMultiScale(gray,scaleFactor=2,minNeighbors=5,minSize=(10, 10),flags = cv2.cv.CV_HAAR_SCALE_IMAGE)
+		r = requests.get('http://192.168.43.241:5000/getLocation')
+		print(r.text)
 		print "Found {0} faces!".format(len(faces))
-
         # Draw face detections region proposals in the image
 		for (x, y, w, h) in faces:
 			cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)

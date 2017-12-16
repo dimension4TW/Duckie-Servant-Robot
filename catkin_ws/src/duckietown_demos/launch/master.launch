@@ -95,10 +95,20 @@
 	<arg name="/localization/map_name" default="open_house_dp6" />
 	<arg name="/localization/gui" default="false"/>
 
+    <arg name="choose_direction" default="true"/>
+
 	<!-- end switch args -->
 	
 	<!-- Enable statistics -->
 	<param name="enable_statistics" value="$(arg statistics)"/>
+
+    <group if="$(arg choose_direction)">
+        <include file="$(find choose_direction_duckie)/launch/choose_direction.launch">
+            <arg name="veh" value="$(arg veh)"/>
+            <arg name="config" value="$(arg config)"/>
+            <arg name="param_file_name" value="$(arg param_file_name)"/>
+        </include>
+    </group>
 
 	<!-- Start Camera -->  
 	<group if="$(arg camera)">

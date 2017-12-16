@@ -7,8 +7,9 @@ from std_msgs.msg import Float32, Int32
 class arduinoROS(object):
     def __init__(self):
         self.dis = 0.0 # distance from ultrasound
+        self.temp = 0.0
+        self.humidity = 0.0
         self.using_apriltags = False
-
         # =========== publisher ===========
         self.pub_led = rospy.Publisher("/arduino/sub/led", Int32, queue_size=10, latch=True)
         self.pub_result = rospy.Publisher("~result", BoolStamped, queue_size=1)
@@ -16,7 +17,8 @@ class arduinoROS(object):
         # =========== subscriber ===========
         self.sub_dis = rospy.Subscriber("/arduino/pub/dis", Float32, self.cbDis)
         self.sub_tags = rospy.Subscriber("~tag_info", AprilTagDetectionArray, self.cbTags)
-
+        self.sub_temp = rospy.Subscriber("/arduino/pub/temp", Float32, self.cbTemp)
+        self.sub_humidity = rospy.Subscriber("/arduino/pub/humidity", Float32, self.cbHumidity)
    # =========== subscribe distance from arduino ===========
     def cbDis(self, msg):
         self.dis = msg.data # self.dis = distance from arduino
@@ -36,7 +38,16 @@ class arduinoROS(object):
             drive.data = False
             self.pub_result.publish(drive)
             #publish 'drive to topic "~result"
-        
+
+
+    # =========== subscribe temp info       ===========    
+    def cbTemp(self, msg):
+         self.temp = msg.data
+         print "temp =" , self.temp
+
+    def cbHumidity(self, msg):
+         self.humidity =msg.data
+         print "humidity =" ,self.humidity
 
     # =========== subscribe tag information ===========
     def cbTags(self, msg):

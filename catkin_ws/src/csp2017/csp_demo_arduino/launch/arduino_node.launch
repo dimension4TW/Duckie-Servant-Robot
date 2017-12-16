@@ -4,7 +4,7 @@
 	<arg name="node_name" default="arduino_node"/>
 	<arg name="pkg_name" default="csp_demo_arduino"/>
 	<arg name="arduino" default="true"/>
-	<arg name="wheel" default="true"/>
+	<arg name="wheel" default="false"/>
 	<!-- ============== open ROS on arduino ============== -->
 	<node
 		pkg="rosserial_python" type="serial_node.py" name="serial_node">

@@ -17,7 +17,7 @@
 		<include file="$(find choose_direction_duckie)/launch/choose_direction_node.launch">
 			<arg name="veh" value="$(arg veh)"/>
 			<arg name="local" value="$(arg local)"/>
-		</include-->
+		</include>
 
 	<remap from="inverse_kinematics_node/wheels_cmd" to="wheels_driver_node/wheels_cmd" />
 		<remap from="inverse_kinematics_node/car_cmd" to="choose_direction_node/car_cmd"/>
